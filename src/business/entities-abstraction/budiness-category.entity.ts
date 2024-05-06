@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Business } from './business.entity';
+import { Business } from './business';
+import { User } from 'src/users/entities/user.entity';
 
 export enum BusinessCategoryTypes {
   WEEDINGHALL = 'weeding hall',
@@ -17,6 +18,6 @@ export class BusinessCategory {
   @Column()
   category_name: BusinessCategoryTypes;
 
-  @OneToMany(() => Business, (business) => business.business_category)
-  business: Business;
+  @OneToMany(() => User, (user) => user.business_category)
+  users: User[];
 }

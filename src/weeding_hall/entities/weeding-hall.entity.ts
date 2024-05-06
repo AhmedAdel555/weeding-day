@@ -1,27 +1,33 @@
-import { Business } from 'src/business/entities/business.entity';
+import { Business } from 'src/business/entities-abstraction/business';
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
+  OneToMany,
   OneToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 import { WeedingHallMealsPackages } from './weeding-hall-meals-packages.entity';
 import { WeedingHallSeatsPackages } from './weeding-hall-seats-packages.entity';
-import { WeedingHallCustomPackages } from './weeding-hall-custom-packages';
+import { WeedingHallCustomPackages } from './weeding-hall-custom-packages.entity';
+import { WeedingHallNumber } from './weeding-hall-numbers.entity';
+import { WeedingHallPictures } from './weeding-hall-pictures.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
-export class WeedingHall {
-  @PrimaryGeneratedColumn()
-  id: number;
-  
+export class WeedingHall extends Business{
+
   @Column()
   out_door: boolean;
 
-  @OneToOne(() => Business)
+  @OneToMany(() => WeedingHallNumber, (weedingHallNumber) => weedingHallNumber.weeding_hall)
+  weeding_hall_numbers: WeedingHallNumber[]
+
+  @OneToMany(() => WeedingHallPictures, (weedingHallPicture) => weedingHallPicture.weeding_hall)
+  weeding_hall_pictures: WeedingHallPictures[]
+
+  @OneToOne(() => User)
   @JoinColumn()
-  business: Business
+  user: User
 
   @OneToMany(
     () => WeedingHallMealsPackages,

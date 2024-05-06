@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString, Length, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator"
-import { BusinessCategoryTypes } from "../entities/budiness-category.entity"
+import { BusinessCategoryTypes } from "../entities-abstraction/budiness-category.entity"
 
 
 @ValidatorConstraint({ name: 'isValidBusinessNumber', async: false })
@@ -46,8 +46,5 @@ export class CreateBusinessDTO {
   @IsNotEmpty()
   @Validate(IsValidBusinessNumber)
   businessNumbers: string[]
-
-  @IsEnum(BusinessCategoryTypes)
-  businessType: BusinessCategoryTypes
 
 }

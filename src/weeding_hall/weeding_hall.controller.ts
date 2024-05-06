@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
+  Param,
   ParseFilePipeBuilder,
+  ParseIntPipe,
   Post,
   Req,
   UploadedFile,
@@ -17,8 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-guard';
 
 @Controller('weeding-hall')
 export class WeedingHallController {
-
-  constructor(private t: WeedingHallService) {}
+  constructor(private weedingHallService: WeedingHallService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -41,10 +43,26 @@ export class WeedingHallController {
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
-    ) logo: Express.Multer.File,
-    @Body() b: CreateWeedingHallDTO,
-    @Req() req: any
+    )
+    logo: Express.Multer.File,
+    @Body() weedingHallDTO: CreateWeedingHallDTO,
+    @Req() req: any,
   ) {
-    return await this.t.createWeedingHall(b, req.user.id, logo);
+    return await this.weedingHallService.createWeedingHall(weedingHallDTO, req.user.id, logo);
+  }
+
+  @Get()
+  async findAll() {
+    return await this.weedingHallService.findAllWeedingHalls();
+  }
+
+  @Get(':id')
+  async findById(@Param('id', ParseIntPipe) id: number){
+     return await this.weedingHallService.findWeedingHallById(id);
+  }
+
+  @Get('/vendors/:vendorId')
+  async findVendorWeedinghall(@Param('vendorId', ParseIntPipe) vendorId: number){
+    return await this.weedingHallService.findVendorWeedingHall(vendorId);
   }
 }

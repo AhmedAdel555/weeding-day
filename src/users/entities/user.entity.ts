@@ -2,9 +2,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
+  ManyToOne,
 } from 'typeorm';
-import { Business } from 'src/business/entities/business.entity';
+import { BusinessCategory } from 'src/business/entities-abstraction/budiness-category.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -39,6 +39,6 @@ export class User {
   })
   role: UserRole;
 
-  @OneToOne(() => Business, (business) => business.user)
-  business: Business;
+  @ManyToOne(() => BusinessCategory, (business) => business.users)
+  business_category: BusinessCategory;
 }
