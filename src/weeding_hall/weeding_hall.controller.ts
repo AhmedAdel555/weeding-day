@@ -48,7 +48,7 @@ export class WeedingHallController {
     @Body() weedingHallDTO: CreateWeedingHallDTO,
     @Req() req: any,
   ) {
-    return await this.weedingHallService.createWeedingHall(weedingHallDTO, req.user.id, logo);
+    return await this.weedingHallService.createWeedingHall(weedingHallDTO, req.user.usedId, logo);
   }
 
   @Get()

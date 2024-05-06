@@ -53,8 +53,6 @@ export class WeedingHallService {
 
     newWeedingHall.user = vendor;
 
-    console.log(newWeedingHall);
-
     return this.weddingHallRepository.save(newWeedingHall);
 
   }

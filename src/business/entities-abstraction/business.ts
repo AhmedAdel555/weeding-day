@@ -5,6 +5,7 @@ import {
 } from 'typeorm';
 
 export abstract class Business {
+  
   @PrimaryGeneratedColumn()
   id: number;
 
