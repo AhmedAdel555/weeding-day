@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, Length, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator"
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator"
 import { BusinessCategoryTypes } from "../entities-abstraction/budiness-category.entity"
 
 
@@ -24,12 +24,13 @@ export class CreateBusinessDTO {
   description: string 
 
   @IsString()
-  facebookUrl: string
+  @IsOptional()
+  facebookUrl?: string
 
   @IsString()
-  instagramUrl: string
+  @IsOptional()
+  instagramUrl?: string
 
-  @IsNumber()
   @IsNotEmpty()
   @Length(6)
   zibCode: number

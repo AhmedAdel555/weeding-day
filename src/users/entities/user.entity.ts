@@ -26,7 +26,7 @@ export class User {
   @Column({ unique: true })
   password: string;
 
-  @Column()
+  @Column({nullable: true})
   picture: string;
 
   @Column()

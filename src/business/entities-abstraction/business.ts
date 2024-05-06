@@ -8,28 +8,28 @@ export abstract class Business {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   business_name: string
 
-  @Column({ unique: true })
+  @Column()
   logo: string
 
-  @Column({ unique: true })
+  @Column()
   description: string
 
-  @Column()
+  @Column({nullable: true})
   facebook_url: string
 
-  @Column()
+  @Column({nullable: true})
   instagram_url: string
 
-  @Column({ unique: true })
+  @Column()
   zib_code: number
 
-  @Column({ unique: true })
+  @Column()
   city: string
 
-  @Column({ unique: true })
+  @Column()
   street: string
   
 }

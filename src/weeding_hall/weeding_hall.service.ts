@@ -44,6 +44,7 @@ export class WeedingHallService {
     newWeedingHall.zib_code = weedingHallDTO.zibCode;
     newWeedingHall.city = weedingHallDTO.city;
     newWeedingHall.street = weedingHallDTO.street;
+    newWeedingHall.out_door = weedingHallDTO.outDoor;
     newWeedingHall.logo = logo.path;
 
     newWeedingHall.weeding_hall_numbers = businessNumbers;
@@ -51,6 +52,8 @@ export class WeedingHallService {
     const vendor = await this.userRepository.findOneBy({id: userId})
 
     newWeedingHall.user = vendor;
+
+    console.log(newWeedingHall);
 
     return this.weddingHallRepository.save(newWeedingHall);
 

@@ -38,7 +38,7 @@ export class WeedingHallController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: /\.(png|jpe?g)$/,
+          fileType: "png",
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
