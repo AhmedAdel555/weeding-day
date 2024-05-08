@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { WeedingHallModule } from './weeding_hall/weeding_hall.module';
 import { AuthModule } from './auth/auth.module';
 import { BusinessModule } from './business/business.module';
+import { WomensAtelierModule } from './womens_atelier/womens_atelier.module';
+import { MansSuitModule } from './mans_suit/mans_suit.module';
 
 
 @Module({
@@ -14,8 +16,8 @@ import { BusinessModule } from './business/business.module';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'springstudent',
-      password: 'springstudent',
+      username: 'root',
+      password: 'root',
       database: 'weeding',
       autoLoadEntities: true,
       synchronize: true,
@@ -24,6 +26,8 @@ import { BusinessModule } from './business/business.module';
     WeedingHallModule,
     AuthModule,
     BusinessModule,
+    WomensAtelierModule,
+    MansSuitModule,
   ],
   controllers: [AppController],
   providers: [AppService],
