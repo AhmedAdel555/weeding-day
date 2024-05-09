@@ -47,5 +47,7 @@ export class CreateBusinessDTO {
   @IsNotEmpty()
   @Validate(IsValidBusinessNumber)
   businessNumbers: string[]
+    salePrice: number;
+    rentPrice: number;
 
 }

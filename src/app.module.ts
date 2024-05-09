@@ -11,15 +11,14 @@ import { WomensAtelierModule } from './womens_atelier/womens_atelier.module';
 import { BarberModule } from './barber/barber.module';
 import { BeautySalonModule } from './beauty-salon/beauty-salon.module';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'springstudent',
-      password: 'springstudent',
+      username: 'root',
+      password: 'root',
       database: 'weeding',
       autoLoadEntities: true,
       synchronize: true,
