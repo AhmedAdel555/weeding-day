@@ -42,8 +42,6 @@ export class WomensAtelierService {
         newWomensAtelier.zib_code = womensAtelierDTO.zibCode;
         newWomensAtelier.city = womensAtelierDTO.city;
         newWomensAtelier.street = womensAtelierDTO.street;
-        newWomensAtelier.sale_price = womensAtelierDTO.salePrice;
-        newWomensAtelier.rent_price = womensAtelierDTO.rentPrice;
         newWomensAtelier.logo = logo.path;
 
         newWomensAtelier.womens_atelier_numbers = businessNumbers;

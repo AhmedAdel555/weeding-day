@@ -2,16 +2,22 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { WomensAtelier } from "./womens-atelier.entity";
 
 @Entity()
-export class WomensAtelierCustomPackages{
+export class WomensAtelierProducts{
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    package_description: string;
-  
-    @Column()
-    price: number;
+    product_description: string;
 
-    @ManyToOne(() => WomensAtelier, (womens_atelier) => womens_atelier.custom_packages)
+    @Column()
+    sale_price:number;
+
+    @Column()
+    rent_price:number;
+
+    @Column()
+    picture: string;
+
+    @ManyToOne(() => WomensAtelier, (womens_atelier) => womens_atelier.products)
     womens_atelier: WomensAtelier;
 }
