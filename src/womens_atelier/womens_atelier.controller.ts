@@ -1,13 +1,17 @@
-import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { WomensAtelierService } from './womens_atelier.service';
 import { JwtAuthGuard } from 'src/auth/jwt-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import CreateWomensAtelierDTO from './dto/create-womens-atelier.dto';
+import { SaveProductAtelierDTO } from './dto/save-product-atelier.dto';
+import { WomensAtelierProductsService } from './womans_atelier-products.service';
 
 @Controller('womens-atelier')
 export class WomensAtelierController {
-    constructor(private womensAtelierService: WomensAtelierService){}
+    constructor(private womensAtelierService: WomensAtelierService,
+      private womansAtelierProductsService: WomensAtelierProductsService
+    ){}
 
     @Post()
     @UseGuards(JwtAuthGuard)
@@ -52,4 +56,50 @@ export class WomensAtelierController {
   async findVendorWomensAtelier(@Param('vendorId', ParseIntPipe) vendorId: number){
     return await this.womensAtelierService.findVendorWomensAtelier(vendorId);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('products')
+  @UseInterceptors(
+    FileInterceptor('picture', {
+      storage: diskStorage({
+        destination: './upload/products-pictures',
+        filename: (_req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async addProductAtelier(
+    @UploadedFile(
+        new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+            fileType: 'png',
+        })
+        .build({
+            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    picture: Express.Multer.File,
+    productAtelierDTO: SaveProductAtelierDTO,
+    @Req() req,
+  ){
+    await this.womansAtelierProductsService.addProductAtelier(productAtelierDTO, req.user.usedId, picture);
+    return "product added successfuly"
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('products/:productId')
+  async updateProductAtelier(
+    productAtelierDTO: SaveProductAtelierDTO,
+    @Param('productId', ParseIntPipe) productId: number
+  ){
+    await this.womansAtelierProductsService.updateProductAtelier(productAtelierDTO, productId);
+    return "product updated successfuly"
+  }
+
+  @Get(':womansAtelier/products')
+  async getWomansAtelierProducts(@Param('womansAtelierId', ParseIntPipe) womensAtelierId: number){
+    return this.womansAtelierProductsService.getWomansAtelierProducts(womensAtelierId);
+  }
+
 }

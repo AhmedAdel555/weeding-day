@@ -5,6 +5,7 @@ import { BeautySalon } from './entities/beauty-salon.entity';
 import { BeautySalonNumber } from './entities/beauty-salon-numbers.entity';
 import { User } from 'src/users/entities/user.entity';
 import CreateBeautySalonDTO from './dto/create-beauty-salon.dto';
+import { BeautySalonCustomPackages } from './entities/beauty-salon-custom-packages.entity';
 
 @Injectable()
 export class BeautySalonService {
@@ -66,4 +67,5 @@ export class BeautySalonService {
   async findVendorBeautySalon(vendorId: number) {
     return await this.beautySalonRepository.findOne({ where: { user: {id: vendorId}}})
   }
+  
 }

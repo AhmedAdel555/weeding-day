@@ -15,7 +15,7 @@ export class IsPasswordEqualTo implements ValidatorConstraintInterface {
   }
 }
 
-export class UserRegisterDto {
+export class UserRegisterDTO {
   @IsString()
   @IsNotEmpty()
   username: string;

@@ -10,19 +10,12 @@ import { MansSuitModule } from './mans_suit/mans_suit.module';
 import { WomensAtelierModule } from './womens_atelier/womens_atelier.module';
 import { BarberModule } from './barber/barber.module';
 import { BeautySalonModule } from './beauty-salon/beauty-salon.module';
+import { dataSourseOptions } from 'db/data-source';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'springstudent',
-      password: 'springstudent',
-      database: 'weeding',
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourseOptions),
     UsersModule,
     WeedingHallModule,
     AuthModule,
@@ -30,7 +23,8 @@ import { BeautySalonModule } from './beauty-salon/beauty-salon.module';
     MansSuitModule,
     WomensAtelierModule,
     BarberModule,
-    BeautySalonModule
+    BeautySalonModule,
+    OrdersModule
   ],
   controllers: [AppController],
   providers: [AppService],

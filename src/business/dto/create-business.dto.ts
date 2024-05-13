@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator"
-import { BusinessCategoryTypes } from "../entities-abstraction/budiness-category.entity"
+import { BusinessCategoryTypes } from "../entities-abstraction/business-category.entity"
 
 
 @ValidatorConstraint({ name: 'isValidBusinessNumber', async: false })
@@ -49,5 +49,4 @@ export class CreateBusinessDTO {
   businessNumbers: string[]
     salePrice: number;
     rentPrice: number;
-
 }

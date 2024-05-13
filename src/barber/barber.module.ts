@@ -7,6 +7,7 @@ import { Barber } from './entities/barber.entity';
 import { BarberCustomPackages } from './entities/barber-custom-packages.entity'; 
 import { BarberNumber } from './entities/barber-numbers.entity'; 
 import { BarberPictures } from './entities/barber-pictures.entity'; 
+import { BarberPackagesService } from './barber-packages.service';
 
 @Module({
     imports: [
@@ -19,6 +20,6 @@ import { BarberPictures } from './entities/barber-pictures.entity';
         ]),
     ],
     controllers: [BarberController],
-    providers: [BarberService], 
+    providers: [BarberService, BarberPackagesService], 
 })
 export class BarberModule {} 

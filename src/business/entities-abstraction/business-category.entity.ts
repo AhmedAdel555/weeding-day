@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Business } from './business';
 import { User } from 'src/users/entities/user.entity';
 
 export enum BusinessCategoryTypes {

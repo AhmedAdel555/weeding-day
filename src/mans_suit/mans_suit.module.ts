@@ -7,6 +7,7 @@ import { MansSuit } from './entities/mans-suit.entity';
 import { MansSuitProducts } from './entities/mans-suit-products.entity';
 import { MansSuitNumber } from './entities/mans-suit-numbers.entity';
 import { MansSuitPictures } from './entities/mans-suit-pictures.entity';
+import { MansSuitProductsService } from './mans_suit-products.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { MansSuitPictures } from './entities/mans-suit-pictures.entity';
       MansSuitPictures
     ]),
   ],
-  providers: [MansSuitService],
+  providers: [MansSuitService, MansSuitProductsService],
   controllers: [MansSuitController]
 })
 export class MansSuitModule {}

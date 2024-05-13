@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
 } from 'typeorm';
-import { BusinessCategory } from 'src/business/entities-abstraction/budiness-category.entity';
+import { BusinessCategory } from 'src/business/entities-abstraction/business-category.entity';
 
 export enum UserRole {
   ADMIN = 'admin',

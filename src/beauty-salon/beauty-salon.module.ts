@@ -7,6 +7,7 @@ import { BeautySalon } from './entities/beauty-salon.entity';
 import { BeautySalonCustomPackages } from './entities/beauty-salon-custom-packages.entity';
 import { BeautySalonNumber } from './entities/beauty-salon-numbers.entity';
 import { BeautySalonPictures } from './entities/beauty-salon-pictures.entity';
+import { BeautySalonPackagesService } from './beauty-salon-packages.service';
 
 
 @Module({ 
@@ -21,11 +22,6 @@ import { BeautySalonPictures } from './entities/beauty-salon-pictures.entity';
 
     ],
     controllers: [BeautySalonController],
-    providers:[BeautySalonService],
-
-
-
-
-
+    providers:[BeautySalonService, BeautySalonPackagesService],
 })
 export class BeautySalonModule {}

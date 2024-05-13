@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { WomensAtelierNumber } from './entities/womens-atelier-numbers.entity';
 import { User } from 'src/users/entities/user.entity';
 import { CreateBusinessDTO } from 'src/business/dto/create-business.dto';
+import { SaveProductAtelierDTO } from './dto/save-product-atelier.dto';
+import { WomensAtelierProducts } from './entities/womens-atelier-products.entity';
 
 @Injectable()
 export class WomensAtelierService {
@@ -14,6 +16,8 @@ export class WomensAtelierService {
         private WomensAtelierRepository: Repository<WomensAtelier>,
         @InjectRepository(WomensAtelierNumber)
         private womensAtelierNumberRepository: Repository<WomensAtelierNumber>,
+        @InjectRepository(WomensAtelierProducts)
+        private WomansAtelierProductsRepository: Repository<WomensAtelierProducts>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
     ) {}

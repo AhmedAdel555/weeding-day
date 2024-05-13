@@ -1,13 +1,17 @@
-import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { BarberService } from './barber.service'; 
 import CreateBarberDTO from './dto/create-barber.dto'; 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/jwt-guard';
+import { saveProductBarberDTO } from './dto/save-product-barber.dto';
+import { BarberPackagesService } from './barber-packages.service';
 
 @Controller('barber') 
 export class BarberController { 
-  constructor(private barberService: BarberService) {} 
+  constructor(private barberService: BarberService, 
+    private barberPackagesService: BarberPackagesService
+  ) {} 
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -52,4 +56,30 @@ export class BarberController {
   async findVendorBarber(@Param('vendorId', ParseIntPipe) vendorId: number){
     return await this.barberService.findVendorBarber(vendorId); 
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('products')
+  async addProductBarber(
+    productBarberDTO: saveProductBarberDTO,
+    @Req() req
+  ){
+    await this.barberPackagesService.addProductBarber(productBarberDTO, req.user.userId);
+    return "package added successfuly"
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('products/:productId')
+  async updateProductBarber(
+    productBarberDTO: saveProductBarberDTO,
+    @Param('productId', ParseIntPipe) productId: number
+  ){
+    await this.barberPackagesService.updateProductBarber(productBarberDTO, productId);
+    return "package updated successfuly"
+  }
+
+  @Get(':barber/products')
+  async getBarberProducts(@Param('barberId', ParseIntPipe) barberId: number){
+    return this.barberPackagesService.getBarberProducts(barberId);
+  }
+  
 }

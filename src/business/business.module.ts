@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BusinessCategory } from './entities-abstraction/budiness-category.entity';
+import { BusinessCategory } from './entities-abstraction/business-category.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([BusinessCategory])],

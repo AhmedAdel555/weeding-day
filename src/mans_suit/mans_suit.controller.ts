@@ -20,10 +20,13 @@ import { diskStorage } from 'multer';
 import CreateMansSuitDTO from './dto/create-mans-suit.dto';
 import { SaveProductDTO } from './dto/save-product.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { MansSuitProductsService } from './mans_suit-products.service';
 
 @Controller('mans-suit')
 export class MansSuitController {
-  constructor(private mansSuitService: MansSuitService) {}
+  constructor(private mansSuitService: MansSuitService,
+    private manSuitProductService: MansSuitProductsService
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -37,7 +40,6 @@ export class MansSuitController {
       }),
     }),
   )
-
   async create(
     @UploadedFile(
       new ParseFilePipeBuilder()
@@ -68,7 +70,6 @@ export class MansSuitController {
   async findById(@Param('id', ParseIntPipe) id: number) {
     return await this.mansSuitService.findMansSuitById(id);
   }
-
 
   @Get('vendors/:vendorId')
   async findVendorMansSuit(@Param('vendorId', ParseIntPipe) vendorId: number) {
@@ -101,7 +102,7 @@ export class MansSuitController {
     productDTO: SaveProductDTO,
     @Req() req,
   ) {
-    await this.mansSuitService.addProduct(productDTO, req.user.userId, picture);
+    await this.manSuitProductService.addProduct(productDTO, req.user.userId, picture);
     return "product added successfully"
   }
 
@@ -111,14 +112,13 @@ export class MansSuitController {
     productDTO: SaveProductDTO,
     @Param('productId', ParseIntPipe) productId: number  
   ) {
-    await this.mansSuitService.updateProduct(productDTO, productId);
+    await this.manSuitProductService.updateProduct(productDTO, productId);
     return "product updated successfully"
   }
 
 
   @Get(':mansSuitId/products')
   async getMansSuitProducts(@Param('mansSuitId', ParseIntPipe) mansSuitId: number){
-      return this.mansSuitService.getMansSuitProducts(mansSuitId);
+      return this.manSuitProductService.getMansSuitProducts(mansSuitId);
   }
-
 }

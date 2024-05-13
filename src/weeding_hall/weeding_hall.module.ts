@@ -9,6 +9,9 @@ import { WeedingHallCustomPackages } from './entities/weeding-hall-custom-packag
 import { WeedingHallNumber } from './entities/weeding-hall-numbers.entity';
 import { WeedingHallPictures } from './entities/weeding-hall-pictures.entity';
 import { UsersModule } from 'src/users/users.module';
+import { WeedingHallCustomPackageService } from './weeding_hall-custom-packages.service';
+import { WeedingHallMealsPackageService } from './weeding_hall-meals-packages.service';
+import { WeedingHallSeatsPackageService } from './weeding_hall-seats-packages.service';
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { UsersModule } from 'src/users/users.module';
     ]),
   ],
   controllers: [WeedingHallController],
-  providers: [WeedingHallService]
+  providers: [WeedingHallService, WeedingHallCustomPackageService, WeedingHallMealsPackageService, WeedingHallSeatsPackageService]
 })
 
 

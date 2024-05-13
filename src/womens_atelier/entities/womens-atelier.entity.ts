@@ -3,7 +3,7 @@ import { Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { WomensAtelierNumber } from "./womens-atelier-numbers.entity";
 import { WomensAtelierPictures } from "./womens-atelier-pictures.entity";
 import { User } from "src/users/entities/user.entity";
-import { WomensAtelierProducts } from "./womens-atelier-products";
+import { WomensAtelierProducts } from "./womens-atelier-products.entity";
 
 @Entity()
 export class WomensAtelier extends Business{

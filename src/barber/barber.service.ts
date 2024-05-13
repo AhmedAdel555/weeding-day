@@ -5,6 +5,8 @@ import { Barber } from './entities/barber.entity';
 import { BarberNumber } from './entities/barber-numbers.entity'; 
 import { User } from 'src/users/entities/user.entity';
 import CreateBarberDTO from './dto/create-barber.dto'; 
+import { saveProductBarberDTO } from './dto/save-product-barber.dto';
+import { BarberCustomPackages } from './entities/barber-custom-packages.entity';
 
 @Injectable()
 export class BarberService { 
@@ -14,6 +16,8 @@ export class BarberService {
     private barberRepository: Repository<Barber>, 
     @InjectRepository(BarberNumber)
     private barberNumberRepository: Repository<BarberNumber>, 
+    @InjectRepository(BarberCustomPackages)
+    private BarberProductsRepository: Repository<BarberCustomPackages>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
