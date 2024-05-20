@@ -10,6 +10,7 @@ import { BeautySalonCustomPackages } from './beauty-salon-custom-packages.entity
 import { BeautySalonNumber } from './beauty-salon-numbers.entity';
 import { BeautySalonPictures } from './beauty-salon-pictures.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 
 
@@ -31,5 +32,7 @@ export class BeautySalon extends Business {
   @JoinColumn()
   user: User
 
+  @OneToMany(() => Order, (order) => order.beauty_salon)
+  orders: Order[]
 
 }

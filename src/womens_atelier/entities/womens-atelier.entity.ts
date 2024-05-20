@@ -4,6 +4,7 @@ import { WomensAtelierNumber } from "./womens-atelier-numbers.entity";
 import { WomensAtelierPictures } from "./womens-atelier-pictures.entity";
 import { User } from "src/users/entities/user.entity";
 import { WomensAtelierProducts } from "./womens-atelier-products.entity";
+import { Order } from "src/orders/entities/order.entity";
 
 @Entity()
 export class WomensAtelier extends Business{
@@ -20,4 +21,7 @@ export class WomensAtelier extends Business{
 
     @OneToMany(() => WomensAtelierProducts, (womensAtelierProducts) => womensAtelierProducts.womens_atelier)
     products: WomensAtelierProducts[]
+
+    @OneToMany(() => Order, (order) => order.women_atelier)
+    orders: Order[]
 }

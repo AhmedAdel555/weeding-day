@@ -4,6 +4,7 @@ import { BarberCustomPackages } from './barber-custom-packages.entity';
 import { BarberPictures } from './barber-pictures.entity';
 import { BarberNumber } from './barber-numbers.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 @Entity()
 export class Barber extends Business {
@@ -21,4 +22,6 @@ export class Barber extends Business {
   @JoinColumn()
   user: User;
 
+  @OneToMany(() => Order, (order) => order.barber)
+  orders: Order[]
 }

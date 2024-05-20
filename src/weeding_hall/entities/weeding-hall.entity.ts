@@ -12,6 +12,7 @@ import { WeedingHallCustomPackages } from './weeding-hall-custom-packages.entity
 import { WeedingHallNumber } from './weeding-hall-numbers.entity';
 import { WeedingHallPictures } from './weeding-hall-pictures.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 @Entity()
 export class WeedingHall extends Business{
@@ -46,4 +47,8 @@ export class WeedingHall extends Business{
     (weedingHallCustomPackages) => weedingHallCustomPackages.weeding_hall,
   )
   custom_packages: WeedingHallCustomPackages[]
+
+  @OneToMany(() => Order, (order) => order.weeding_hall)
+  orders: Order[]
+
 }

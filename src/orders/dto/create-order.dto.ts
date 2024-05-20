@@ -1,0 +1,39 @@
+import { Type } from "class-transformer";
+import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+
+export class CreateOrderDTO{
+  orders: OrderDTO[]
+}
+
+export class OrderDTO {
+  @Type(() => Date)
+  @IsDate()
+  date: Date;
+
+  @IsNumber()
+  price: number
+
+  @IsString()
+  @IsNotEmpty()
+  serviceName: string
+
+  @IsNumber()
+  @IsOptional()
+  weedingHallId?: number;
+
+  @IsNumber()
+  @IsOptional()
+  barberId?: number;
+
+  @IsNumber()
+  @IsOptional()
+  beautySalonId?: number;
+
+  @IsNumber()
+  @IsOptional()
+  manSuitId?: number;
+
+  @IsNumber()
+  @IsOptional()
+  womenAtelierId?: number;
+}

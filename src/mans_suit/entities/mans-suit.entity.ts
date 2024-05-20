@@ -4,6 +4,7 @@ import {Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { MansSuitNumber } from "./mans-suit-numbers.entity";
 import { MansSuitProducts } from "./mans-suit-products.entity";
 import { MansSuitPictures } from "./mans-suit-pictures.entity";
+import { Order } from "src/orders/entities/order.entity";
 
 @Entity()
 export class MansSuit extends Business{
@@ -20,4 +21,7 @@ export class MansSuit extends Business{
 
     @OneToMany(() => MansSuitProducts, (mansSuitProducts) => mansSuitProducts.mans_suit)
     products: MansSuitProducts[]
+
+    @OneToMany(() => Order, (order) => order.man_suit)
+    orders: Order[]
 }
