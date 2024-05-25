@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import CreateWeedingHallDTO from './dto/create-weeding-hall.dto';
 import { WeedingHallNumber } from './entities/weeding-hall-numbers.entity';
 import { User } from 'src/users/entities/user.entity';
+import { WeedingHallPictures } from './entities/weeding-hall-pictures.entity';
 
 @Injectable()
 export class WeedingHallService {
@@ -15,6 +16,8 @@ export class WeedingHallService {
     private weddingHallRepository: Repository<WeedingHall>,
     @InjectRepository(WeedingHallNumber)
     private weddingHallNumberRepository: Repository<WeedingHallNumber>,
+    @InjectRepository(WeedingHallPictures)
+    private weddingHallPictureRepository: Repository<WeedingHallPictures>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
@@ -57,15 +60,23 @@ export class WeedingHallService {
 
   }
 
+  async uploadImage(image: Express.Multer.File, vendorId: number){
+    const weedingHall = await this.weddingHallRepository.findOneBy({ user: {id: vendorId}})
+    const newPicture = new WeedingHallPictures();
+    newPicture.picture = image.path;
+    newPicture.weeding_hall = weedingHall;
+    return this.weddingHallPictureRepository.save(newPicture);
+  }
+
   async findAllWeedingHalls(){
     return await this.weddingHallRepository.find();
   }
 
   async findWeedingHallById(id: number) {
-    return await this.weddingHallRepository.findOneBy({id: id});
+    return await this.weddingHallRepository.findOne({ where: {id: id}, relations: ['user', 'weeding_hall_numbers', 'weeding_hall_pictures', 'meals_packages', 'seats_packages', 'custom_packages']});
   }
 
   async findVendorWeedingHall(vendorId: number) {
-    return await this.weddingHallRepository.findOne({ where: { user: {id: vendorId}}})
+    return await this.weddingHallRepository.findOne({ where: { user: {id: vendorId}}, relations: ['weeding_hall_numbers', 'weeding_hall_pictures', 'meals_packages', 'seats_packages', 'custom_packages']})
   }
 }

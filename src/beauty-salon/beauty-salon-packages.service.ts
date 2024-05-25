@@ -20,7 +20,8 @@ export class BeautySalonPackagesService {
 
     const newProduct = new BeautySalonCustomPackages();
 
-    newProduct.package_description = prodctBeautySalonDTO.productBeautySalonDescription;
+    newProduct.package_description = prodctBeautySalonDTO.packageBeautySalonDescription;
+    newProduct.price = prodctBeautySalonDTO.price;
     newProduct.beauty_salon = beautySalonShop;
 
     return this.BeautySalonProductsRepository.save(newProduct);
@@ -29,15 +30,14 @@ export class BeautySalonPackagesService {
   async updatePackageBeautySalon(prodctBeautySalonDTO: saveProductBeautySalonDTO, productId: number){
     const updatedProduct = await this.BeautySalonProductsRepository.findOneBy({id: productId});
 
-    updatedProduct.package_description = prodctBeautySalonDTO.productBeautySalonDescription;
+    updatedProduct.package_description = prodctBeautySalonDTO.packageBeautySalonDescription;
+    updatedProduct.price = prodctBeautySalonDTO.price;
 
     return this.BeautySalonProductsRepository.save(updatedProduct);
   }
 
-  async getBeautySalonPackages (beautySalonId :number){
-    return this.BeautySalonProductsRepository.find({
-      where: {beauty_salon: {id: beautySalonId}},
-    })
+  async deletePackageSalon(productId:number){
+    return this.BeautySalonProductsRepository.delete(productId);
   }
 
 }

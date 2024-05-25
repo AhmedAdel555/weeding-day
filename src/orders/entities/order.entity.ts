@@ -37,7 +37,6 @@ export class Order {
   @ManyToOne(() => WomensAtelier, (womensAtelier) => womensAtelier.orders)
   women_atelier: WomensAtelier;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.orders)
   user: User
 }

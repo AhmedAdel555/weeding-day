@@ -3,8 +3,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { BusinessCategory } from 'src/business/entities-abstraction/business-category.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -29,7 +31,7 @@ export class User {
   @Column({nullable: true})
   picture: string;
 
-  @Column()
+  @Column({ unique: true })
   phone_number: string;
 
   @Column({
@@ -41,4 +43,7 @@ export class User {
 
   @ManyToOne(() => BusinessCategory, (business) => business.users)
   business_category: BusinessCategory;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[]
 }

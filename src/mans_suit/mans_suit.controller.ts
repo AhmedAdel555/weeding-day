@@ -14,12 +14,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { MansSuitService } from './mans_suit.service';
-import { JwtAuthGuard } from 'src/auth/jwt-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import CreateMansSuitDTO from './dto/create-mans-suit.dto';
 import { SaveProductDTO } from './dto/save-product.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { MansSuitProductsService } from './mans_suit-products.service';
 
 @Controller('mans-suit')
@@ -29,7 +27,6 @@ export class MansSuitController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
@@ -76,7 +73,6 @@ export class MansSuitController {
     return await this.mansSuitService.findVendorMansSuit(vendorId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('products')
   @UseInterceptors(
     FileInterceptor('picture', {
@@ -106,7 +102,6 @@ export class MansSuitController {
     return "product added successfully"
   }
 
-  @UseGuards(JwtAuthGuard)
   @Put('products/:productId')
   async updateProduct(
     productDTO: SaveProductDTO,

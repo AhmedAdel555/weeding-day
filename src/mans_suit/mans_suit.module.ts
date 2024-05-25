@@ -20,6 +20,7 @@ import { MansSuitProductsService } from './mans_suit-products.service';
     ]),
   ],
   providers: [MansSuitService, MansSuitProductsService],
-  controllers: [MansSuitController]
+  controllers: [MansSuitController],
+  exports: [TypeOrmModule]
 })
 export class MansSuitModule {}

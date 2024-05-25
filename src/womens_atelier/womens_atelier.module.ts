@@ -20,6 +20,7 @@ import { WomensAtelierProductsService } from './womans_atelier-products.service'
     ]),
   ],
   providers: [WomensAtelierService, WomensAtelierProductsService],
-  controllers: [WomensAtelierController]
+  controllers: [WomensAtelierController],
+  exports: [TypeOrmModule]
 })
 export class WomensAtelierModule {}

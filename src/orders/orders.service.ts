@@ -34,6 +34,8 @@ export class OrdersService {
 
     const currentUser = await this.userRepository.findOneBy({id: userId});
 
+    // semulate the payment process
+
     createOrder.orders.forEach(async (order) => {
       const newOrder = new Order()
       newOrder.price = order.price;
@@ -67,42 +69,42 @@ export class OrdersService {
   async findUserOrdersHistory(userId: number){
     return this.orderRepository.find({
       where: { user: { id: userId } },
-      relations: ['user']
+      relations: ['weeding_hall', 'beauty_salon', 'man_suit', 'women_atelier', 'barber']
     });
   }
   
   async getOrdersByBarberId(barberId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { barber: { id: barberId } },
-      relations: ['barber', 'user'],
+      relations: ['user'],
     });
   }
 
   async getOrdersByBeautySalonId(beautySalonId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { beauty_salon: { id: beautySalonId } },
-      relations: ['beauty_salon', 'user'],
+      relations: ['user'],
     });
   }
 
   async getOrdersByWeedingHallId(weedingHallId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { weeding_hall: { id: weedingHallId } },
-      relations: ['weeding_hall', 'user'],
+      relations: ['user'],
     });
   }
 
   async getOrdersByMansSuitId(manSuitId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { man_suit: { id: manSuitId } },
-      relations: ['man_suit', 'user'],
+      relations: ['user'],
     });
   }
 
   async getOrdersByWomensAtelierId(womensAtelierId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { women_atelier: { id: womensAtelierId } },
-      relations: ['women_atelier', 'user'],
+      relations: ['user'],
     });
   }
 }

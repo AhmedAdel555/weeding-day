@@ -5,8 +5,7 @@ import { Barber } from './entities/barber.entity';
 import { BarberNumber } from './entities/barber-numbers.entity'; 
 import { User } from 'src/users/entities/user.entity';
 import CreateBarberDTO from './dto/create-barber.dto'; 
-import { saveProductBarberDTO } from './dto/save-product-barber.dto';
-import { BarberCustomPackages } from './entities/barber-custom-packages.entity';
+import { BarberPictures } from './entities/barber-pictures.entity';
 
 @Injectable()
 export class BarberService { 
@@ -16,8 +15,8 @@ export class BarberService {
     private barberRepository: Repository<Barber>, 
     @InjectRepository(BarberNumber)
     private barberNumberRepository: Repository<BarberNumber>, 
-    @InjectRepository(BarberCustomPackages)
-    private BarberProductsRepository: Repository<BarberCustomPackages>,
+    @InjectRepository(BarberPictures)
+    private barberPictureRepository: Repository<BarberPictures>, 
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
@@ -59,15 +58,26 @@ export class BarberService {
 
   }
 
+
+  async uploadImage(image: Express.Multer.File, vendorId: number){
+    const barber = await this.barberRepository.findOneBy({ user: {id: vendorId}})
+    const newPicture = new BarberPictures();
+    newPicture.picture = image.path;
+    newPicture.barber = barber;
+    return this.barberPictureRepository.save(newPicture);
+  }
+
   async findAllBarbers(){
     return await this.barberRepository.find();
   }
 
   async findBarberById(id: number) {
-    return await this.barberRepository.findOneBy({id: id}); 
+    return await this.barberRepository.findOne({ where: {id: id}, relations: ['barber_numbers', 'barber_pictures', 'custom_packages', 'user']}); 
   }
 
   async findVendorBarber(vendorId: number) {
-    return await this.barberRepository.findOne({ where: { user: {id: vendorId}}}) 
+    return await this.barberRepository.findOne({ where: { user: {id: vendorId}}, relations: ['barber_numbers', 'barber_pictures', 'custom_packages', 'user']}) 
   }
+
+
 }

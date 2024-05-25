@@ -6,6 +6,7 @@ import { BeautySalonNumber } from './entities/beauty-salon-numbers.entity';
 import { User } from 'src/users/entities/user.entity';
 import CreateBeautySalonDTO from './dto/create-beauty-salon.dto';
 import { BeautySalonCustomPackages } from './entities/beauty-salon-custom-packages.entity';
+import { BeautySalonPictures } from './entities/beauty-salon-pictures.entity';
 
 @Injectable()
 export class BeautySalonService {
@@ -15,6 +16,8 @@ export class BeautySalonService {
     private beautySalonRepository: Repository<BeautySalon>,
     @InjectRepository(BeautySalonNumber)
     private beautySalonNumberRepository: Repository<BeautySalonNumber>,
+    @InjectRepository(BeautySalonPictures)
+    private beautySalonPictureRepository: Repository<BeautySalonPictures>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
@@ -61,11 +64,19 @@ export class BeautySalonService {
   }
 
   async findBeautySalonById(id: number) {
-    return await this.beautySalonRepository.findOneBy({id: id});
+    return await this.beautySalonRepository.findOne({where: {id: id}, relations: ['beauty_salon_numbers', 'beauty_salon_pictures', 'custom_packages', 'user']});
   }
 
   async findVendorBeautySalon(vendorId: number) {
-    return await this.beautySalonRepository.findOne({ where: { user: {id: vendorId}}})
+    return await this.beautySalonRepository.findOne({ where: { user: {id: vendorId}}, relations: ['beauty_salon_numbers', 'beauty_salon_pictures', 'custom_packages', 'user']})
   }
   
+  
+  async uploadImage(image: Express.Multer.File, vendorId: number){
+    const salon = await this.beautySalonRepository.findOneBy({ user: {id: vendorId}})
+    const newPicture = new BeautySalonPictures();
+    newPicture.picture = image.path;
+    newPicture.beauty_salon = salon;
+    return this.beautySalonPictureRepository.save(newPicture);
+  }
 }

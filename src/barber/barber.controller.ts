@@ -1,11 +1,14 @@
-import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { BarberService } from './barber.service'; 
 import CreateBarberDTO from './dto/create-barber.dto'; 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { JwtAuthGuard } from 'src/auth/jwt-guard';
-import { saveProductBarberDTO } from './dto/save-product-barber.dto';
+import { saveProductBarberDTO } from './dto/save-package-barber.dto';
 import { BarberPackagesService } from './barber-packages.service';
+import { Roles } from 'src/decorators/roles.decorator';
+import { UserRole } from 'src/users/entities/user.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller('barber') 
 export class BarberController { 
@@ -13,8 +16,9 @@ export class BarberController {
     private barberPackagesService: BarberPackagesService
   ) {} 
 
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
   @Post()
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
@@ -29,7 +33,7 @@ export class BarberController {
     @UploadedFile(
       new ParseFilePipeBuilder()
       .addFileTypeValidator({
-          fileType: "png",
+        fileType: /png|jpg|jpeg/,
       })
       .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -57,29 +61,60 @@ export class BarberController {
     return await this.barberService.findVendorBarber(vendorId); 
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('products')
-  async addProductBarber(
-    productBarberDTO: saveProductBarberDTO,
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Post('/images/upload')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './upload/barber-images',
+        filename: (_req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async uploadImageForWeedingHall(@UploadedFile(
+    new ParseFilePipeBuilder()
+      .addFileTypeValidator({
+        fileType: /png|jpg|jpeg/,
+      })
+      .build({
+        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+      }),
+  )
+  image: Express.Multer.File, @Req() req){
+    return await this.barberService.uploadImage(image, req.user.userId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Post('packages')
+  async addpackageBarber(
+    @Body() productBarberDTO: saveProductBarberDTO,
     @Req() req
   ){
     await this.barberPackagesService.addProductBarber(productBarberDTO, req.user.userId);
     return "package added successfuly"
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Put('products/:productId')
-  async updateProductBarber(
-    productBarberDTO: saveProductBarberDTO,
-    @Param('productId', ParseIntPipe) productId: number
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Put('packages/:packageId')
+  async updatePackageBarber(
+    @Body() productBarberDTO: saveProductBarberDTO,
+    @Param('packageId', ParseIntPipe) packageId: number
   ){
-    await this.barberPackagesService.updateProductBarber(productBarberDTO, productId);
+    await this.barberPackagesService.updateProductBarber(productBarberDTO, packageId);
     return "package updated successfuly"
   }
 
-  @Get(':barber/products')
-  async getBarberProducts(@Param('barberId', ParseIntPipe) barberId: number){
-    return this.barberPackagesService.getBarberProducts(barberId);
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Delete('packages/:packageId')
+  async deletePackageBarber(@Param('packageId', ParseIntPipe) packageId: number){
+    await this.barberPackagesService.deletePackageBarber(packageId);
+    return "package deleted successfuly"
   }
-  
+
 }

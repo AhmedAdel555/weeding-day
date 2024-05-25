@@ -21,5 +21,6 @@ import { BarberPackagesService } from './barber-packages.service';
     ],
     controllers: [BarberController],
     providers: [BarberService, BarberPackagesService], 
+    exports: [TypeOrmModule]
 })
 export class BarberModule {} 

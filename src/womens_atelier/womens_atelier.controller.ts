@@ -1,6 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { WomensAtelierService } from './womens_atelier.service';
-import { JwtAuthGuard } from 'src/auth/jwt-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import CreateWomensAtelierDTO from './dto/create-womens-atelier.dto';
@@ -14,7 +13,6 @@ export class WomensAtelierController {
     ){}
 
     @Post()
-    @UseGuards(JwtAuthGuard)
     @UseInterceptors(
         FileInterceptor('logo', {
             storage: diskStorage({
@@ -57,7 +55,6 @@ export class WomensAtelierController {
     return await this.womensAtelierService.findVendorWomensAtelier(vendorId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('products')
   @UseInterceptors(
     FileInterceptor('picture', {
@@ -69,6 +66,8 @@ export class WomensAtelierController {
       }),
     }),
   )
+
+
   async addProductAtelier(
     @UploadedFile(
         new ParseFilePipeBuilder()
@@ -87,7 +86,6 @@ export class WomensAtelierController {
     return "product added successfuly"
   }
 
-  @UseGuards(JwtAuthGuard)
   @Put('products/:productId')
   async updateProductAtelier(
     productAtelierDTO: SaveProductAtelierDTO,

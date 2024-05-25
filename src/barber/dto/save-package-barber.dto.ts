@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
-export class saveProductBeautySalonDTO{
+export class saveProductBarberDTO{
     @IsString()
     @IsNotEmpty()
-    packageBeautySalonDescription: string;
+    packageDescription: string;
 
     @IsNumber()
     price: number;

@@ -1,16 +1,15 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator"
-import { BusinessCategoryTypes } from "../entities-abstraction/business-category.entity"
+import { IsNotEmpty, IsOptional, IsString, Length, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator"
 
 
 @ValidatorConstraint({ name: 'isValidBusinessNumber', async: false })
 export class IsValidBusinessNumber implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
     // Ensure each number is a string of length 10 and consists only of digits
-    return Array.isArray(value) && value.every(num => typeof num === 'string' && /^\d{10}$/.test(num));
+    return Array.isArray(value) && value.every(num => typeof num === 'string' && /^\d{11}$/.test(num));
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `${args.property} must be an array of 10-digit`;
+    return `${args.property} must be an array of 11-digit`;
   }
 }
 
@@ -32,7 +31,7 @@ export class CreateBusinessDTO {
   instagramUrl?: string
 
   @IsNotEmpty()
-  @Length(6)
+  @Length(5)
   zibCode: number
 
   @IsString()
@@ -47,6 +46,4 @@ export class CreateBusinessDTO {
   @IsNotEmpty()
   @Validate(IsValidBusinessNumber)
   businessNumbers: string[]
-    salePrice: number;
-    rentPrice: number;
 }

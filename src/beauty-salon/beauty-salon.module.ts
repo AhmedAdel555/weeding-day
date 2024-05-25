@@ -23,5 +23,6 @@ import { BeautySalonPackagesService } from './beauty-salon-packages.service';
     ],
     controllers: [BeautySalonController],
     providers:[BeautySalonService, BeautySalonPackagesService],
+    exports: [TypeOrmModule]
 })
 export class BeautySalonModule {}

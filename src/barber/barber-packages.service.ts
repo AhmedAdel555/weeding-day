@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BarberNumber } from './entities/barber-numbers.entity'; 
-import { saveProductBarberDTO } from './dto/save-product-barber.dto';
+import { saveProductBarberDTO } from './dto/save-package-barber.dto';
 import { BarberCustomPackages } from './entities/barber-custom-packages.entity';
 import { BarberService } from './barber.service';
 
@@ -23,7 +23,8 @@ export class BarberPackagesService {
 
     const newProduct = new BarberCustomPackages();
 
-    newProduct.package_description = productBarberDTO.productBarberDescription;
+    newProduct.package_description = productBarberDTO.packageDescription;
+    newProduct.price = productBarberDTO.price;
     newProduct.barber = barberShop;
 
     return this.BarberProductsRepository.save(newProduct);
@@ -32,14 +33,13 @@ export class BarberPackagesService {
   async updateProductBarber(productBarberDTO: saveProductBarberDTO, productId:number){
     const updatedProduct = await this.BarberProductsRepository.findOneBy({id: productId});
 
-    updatedProduct.package_description = productBarberDTO.productBarberDescription;
+    updatedProduct.package_description = productBarberDTO.packageDescription;
+    updatedProduct.price = productBarberDTO.price;
 
-    return this.barberNumberRepository.save(updatedProduct);
+    return this.BarberProductsRepository.save(updatedProduct);
   }
 
-  async getBarberProducts (barberId: number){
-    return this.BarberProductsRepository.find({
-      where: {barber: {id: barberId}},
-    })
+  async deletePackageBarber(productId:number){
+    return this.BarberProductsRepository.delete(productId);
   }
 }

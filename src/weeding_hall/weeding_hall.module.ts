@@ -26,7 +26,8 @@ import { WeedingHallSeatsPackageService } from './weeding_hall-seats-packages.se
     ]),
   ],
   controllers: [WeedingHallController],
-  providers: [WeedingHallService, WeedingHallCustomPackageService, WeedingHallMealsPackageService, WeedingHallSeatsPackageService]
+  providers: [WeedingHallService, WeedingHallCustomPackageService, WeedingHallMealsPackageService, WeedingHallSeatsPackageService],
+  exports: [TypeOrmModule]
 })
 
 

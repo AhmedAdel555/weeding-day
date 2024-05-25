@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 export class SaveCustomPackageDTO {
   @IsString()
   @IsNotEmpty()
-  package_description: string;
+  packageDescription: string;
 
   @IsNumber()
   price: number;

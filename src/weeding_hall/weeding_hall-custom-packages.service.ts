@@ -20,7 +20,7 @@ export class WeedingHallCustomPackageService {
     const weedingHall = await this.weddingHallRepository.findOneBy({user:{id: vendorId}})
 
     const newCustomPackage = new WeedingHallCustomPackages()
-    newCustomPackage.package_description = saveCustomPackageDTO.package_description;
+    newCustomPackage.package_description = saveCustomPackageDTO.packageDescription;
     newCustomPackage.price = saveCustomPackageDTO.price;
     newCustomPackage.weeding_hall = weedingHall;
 
@@ -32,7 +32,7 @@ export class WeedingHallCustomPackageService {
 
     const customPackage = await this.weedingHallCustomPackagesRepository.findOneBy({id: customPackageId});
 
-    customPackage.package_description = saveCustomPackageDTO.package_description;
+    customPackage.package_description = saveCustomPackageDTO.packageDescription;
     customPackage.price = saveCustomPackageDTO.price;
 
      return this.weedingHallCustomPackagesRepository.save(customPackage);
