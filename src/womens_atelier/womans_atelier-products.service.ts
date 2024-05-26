@@ -20,9 +20,9 @@ export class WomensAtelierProductsService {
 
       const newProduct = new WomensAtelierProducts();
 
-      newProduct.product_description = productAtelierDTO.productAtelierDescription;
-      newProduct.sale_price = productAtelierDTO.saleAtelierPrice;
-      newProduct.rent_price = productAtelierDTO.rentAtelierPrice;
+      newProduct.product_description = productAtelierDTO.productDescription;
+      newProduct.sale_price = productAtelierDTO.salePrice;
+      newProduct.rent_price = productAtelierDTO.rentPrice;
       newProduct.picture = picture.path;
       newProduct.womens_atelier = womenAtelierShop;
 
@@ -33,16 +33,14 @@ export class WomensAtelierProductsService {
 
       const updatedProduct = await this.WomansAtelierProductsRepository.findOneBy({id: productId});
 
-      updatedProduct.product_description = productAtelierDTO.productAtelierDescription;
-      updatedProduct.sale_price = productAtelierDTO.saleAtelierPrice;
-      updatedProduct.rent_price = productAtelierDTO.rentAtelierPrice;
+      updatedProduct.product_description = productAtelierDTO.productDescription;
+      updatedProduct.sale_price = productAtelierDTO.salePrice;
+      updatedProduct.rent_price = productAtelierDTO.rentPrice;
 
       return this.WomansAtelierProductsRepository.save(updatedProduct);
   }
 
-  async getWomansAtelierProducts (womansAtelierId: number){
-      return this.WomansAtelierProductsRepository.find({
-          where: {womens_atelier: {id: womansAtelierId}},
-      });
+  async deleteProduct(productId:number){
+    return this.WomansAtelierProductsRepository.delete(productId);
   }
 }

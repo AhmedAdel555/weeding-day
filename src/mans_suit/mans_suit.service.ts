@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { CreateBusinessDTO } from 'src/business/dto/create-business.dto';
 import { MansSuitProducts } from './entities/mans-suit-products.entity';
 import { SaveProductDTO } from './dto/save-product.dto';
+import { MansSuitPictures } from './entities/mans-suit-pictures.entity';
 
 @Injectable()
 export class MansSuitService {
@@ -16,8 +17,8 @@ export class MansSuitService {
         private MansSuitRepository: Repository<MansSuit>,
         @InjectRepository(MansSuitNumber)
         private MansSuitNumberRepository: Repository<MansSuitNumber>,
-        @InjectRepository(MansSuitProducts)
-        private MansSuitProductsRepository: Repository<MansSuitProducts>,
+        @InjectRepository(MansSuitPictures)
+        private MansSuitPicturesRepository: Repository<MansSuitPictures>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
     ) {}
@@ -54,7 +55,7 @@ export class MansSuitService {
 
         newMansSuit.user = vendor;
 
-        return this.MansSuitNumberRepository.save(newMansSuit);
+        return this.MansSuitRepository.save(newMansSuit);
     }
 
     async findAllMansSuit(){
@@ -62,10 +63,18 @@ export class MansSuitService {
     }
 
     async findMansSuitById(id: number){
-        return await this.MansSuitRepository.findOneBy({id: id});
+        return await this.MansSuitRepository.findOne({where: {id: id}, relations: ['user', 'products', 'mans_suit_pictures', 'mans_suit_numbers']});
     }
 
     async findVendorMansSuit(vendorId: number){
-        return await this.MansSuitRepository.findOne({ where: { user: {id: vendorId}}})
+        return await this.MansSuitRepository.findOne({ where: { user: {id: vendorId}}, relations: ['products', 'mans_suit_pictures', 'mans_suit_numbers']})
+    }
+
+    async uploadImage(image: Express.Multer.File, vendorId: number){
+      const shop = await this.MansSuitRepository.findOneBy({ user: {id: vendorId}})
+      const newPicture = new MansSuitPictures();
+      newPicture.picture = image.path;
+      newPicture.mans_suit = shop;
+      return this.MansSuitPicturesRepository.save(newPicture);
     }
 }

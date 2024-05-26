@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { CreateBusinessDTO } from 'src/business/dto/create-business.dto';
 import { SaveProductAtelierDTO } from './dto/save-product-atelier.dto';
 import { WomensAtelierProducts } from './entities/womens-atelier-products.entity';
+import { WomensAtelierPictures } from './entities/womens-atelier-pictures.entity';
 
 @Injectable()
 export class WomensAtelierService {
@@ -16,8 +17,8 @@ export class WomensAtelierService {
         private WomensAtelierRepository: Repository<WomensAtelier>,
         @InjectRepository(WomensAtelierNumber)
         private womensAtelierNumberRepository: Repository<WomensAtelierNumber>,
-        @InjectRepository(WomensAtelierProducts)
-        private WomansAtelierProductsRepository: Repository<WomensAtelierProducts>,
+        @InjectRepository(WomensAtelierPictures)
+        private womensAtelierPicturesRepository: Repository<WomensAtelierPictures>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
     ) {}
@@ -62,10 +63,18 @@ export class WomensAtelierService {
     }
 
     async findWomensAtelierById(id: number){
-        return await this.WomensAtelierRepository.findOneBy({id: id});
+        return await this.WomensAtelierRepository.findOne({ where: {id: id}  , relations: ['user', 'womens_atelier_numbers', 'womens_atelier_pictures', 'products']});
     }
 
     async findVendorWomensAtelier(vendorId: number){
-        return await this.WomensAtelierRepository.findOne({ where: { user: {id: vendorId}}})
+        return await this.WomensAtelierRepository.findOne({ where: { user: {id: vendorId}}, relations: ['womens_atelier_numbers', 'womens_atelier_pictures', 'products']})
+    }
+
+    async uploadImage(image: Express.Multer.File, vendorId: number){
+      const shop = await this.WomensAtelierRepository.findOneBy({ user: {id: vendorId}})
+      const newPicture = new WomensAtelierPictures();
+      newPicture.picture = image.path;
+      newPicture.womens_atelier = shop;
+      return this.womensAtelierPicturesRepository.save(newPicture);
     }
 }

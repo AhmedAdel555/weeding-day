@@ -1,17 +1,18 @@
+import { Transform } from "class-transformer";
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class SaveProductAtelierDTO{
-    @IsString()
-    @IsNotEmpty()
-    productAtelierDescription: string;
-
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  saleAtelierPrice:number;
+  productDescription: string;
 
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber()
-  @IsNotEmpty()
-  rentAtelierPrice:number;
+  salePrice:number;
+
+  @Transform(({ value }) => parseFloat(value))
+  @IsNumber()
+  rentPrice:number;
 }
 
 

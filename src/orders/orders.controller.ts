@@ -21,7 +21,7 @@ export class OrdersController {
 
   @Roles([UserRole.USER])
   @UseGuards(AuthGuard, RoleGuard)
-  @Get()
+  @Get('me')
   async getOrdersByUserId(@Req() req): Promise<Order[]> {
     return await this.ordersService.findUserOrdersHistory(req.user.userId);
   }

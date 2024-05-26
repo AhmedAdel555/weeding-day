@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MansSuit } from './entities/mans-suit.entity';
 import { Repository } from 'typeorm';
-import { MansSuitNumber } from './entities/mans-suit-numbers.entity';
-import { User } from 'src/users/entities/user.entity';
-import { CreateBusinessDTO } from 'src/business/dto/create-business.dto';
 import { MansSuitProducts } from './entities/mans-suit-products.entity';
 import { SaveProductDTO } from './dto/save-product.dto';
 import { MansSuitService } from './mans_suit.service';
@@ -33,8 +29,6 @@ export class MansSuitProductsService {
    }
 
    async updateProduct(productDTO: SaveProductDTO, productId: number){
-
-
     const updatedProduct = await this.MansSuitProductsRepository.findOneBy({id: productId});
 
     updatedProduct.product_description = productDTO.productDescription;
@@ -44,9 +38,7 @@ export class MansSuitProductsService {
     return this.MansSuitProductsRepository.save(updatedProduct);
  }
 
-   async getMansSuitProducts(mansSuitId: number){
-      return this.MansSuitProductsRepository.find({
-        where: { mans_suit: { id: mansSuitId } },
-      });
-   }
+  async deleteProduct(productId:number){
+    return this.MansSuitProductsRepository.delete(productId);
+  }
 }

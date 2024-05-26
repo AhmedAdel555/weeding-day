@@ -84,16 +84,6 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<UserResponseDTO>
-  {
-    const existUser = await this.usersRepository.findOneBy({ id: id });
-    existUser.username = updateUserDto.username;
-    existUser.email = updateUserDto.email;
-    existUser.phone_number = updateUserDto.phoneNumber;
-    const updateduser = await this.usersRepository.save(existUser);
-    return updateduser;
-  }
-
   async remove(id: number): Promise<void>
   {
     await this.usersRepository.delete(id);

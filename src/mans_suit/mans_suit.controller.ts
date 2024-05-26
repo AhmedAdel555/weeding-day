@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -19,6 +20,10 @@ import { diskStorage } from 'multer';
 import CreateMansSuitDTO from './dto/create-mans-suit.dto';
 import { SaveProductDTO } from './dto/save-product.dto';
 import { MansSuitProductsService } from './mans_suit-products.service';
+import { Roles } from 'src/decorators/roles.decorator';
+import { User, UserRole } from 'src/users/entities/user.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller('mans-suit')
 export class MansSuitController {
@@ -26,6 +31,8 @@ export class MansSuitController {
     private manSuitProductService: MansSuitProductsService
   ) {}
 
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
   @Post()
   @UseInterceptors(
     FileInterceptor('logo', {
@@ -41,7 +48,7 @@ export class MansSuitController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'png',
+          fileType: /png|jpg|jpeg/,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -53,7 +60,7 @@ export class MansSuitController {
   ) {
     return await this.mansSuitService.createMansSuit(
       mansSuitTDO,
-      req.user.usedId,
+      req.user.userId,
       logo,
     );
   }
@@ -73,6 +80,35 @@ export class MansSuitController {
     return await this.mansSuitService.findVendorMansSuit(vendorId);
   }
 
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Post('/images/upload')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './upload/man-suit-images',
+        filename: (_req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async uploadImageForWeedingHall(@UploadedFile(
+    new ParseFilePipeBuilder()
+      .addFileTypeValidator({
+        fileType: /png|jpg|jpeg/,
+      })
+      .build({
+        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+      }),
+  )
+  image: Express.Multer.File, @Req() req){
+    return await this.mansSuitService.uploadImage(image, req.user.userId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
   @Post('products')
   @UseInterceptors(
     FileInterceptor('picture', {
@@ -88,32 +124,38 @@ export class MansSuitController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'png',
+          fileType: /png|jpg|jpeg/,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     )
     picture: Express.Multer.File,
-    productDTO: SaveProductDTO,
+    @Body() productDTO: SaveProductDTO,
     @Req() req,
   ) {
     await this.manSuitProductService.addProduct(productDTO, req.user.userId, picture);
     return "product added successfully"
   }
 
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
   @Put('products/:productId')
   async updateProduct(
-    productDTO: SaveProductDTO,
+    @Body() productDTO: SaveProductDTO,
     @Param('productId', ParseIntPipe) productId: number  
   ) {
     await this.manSuitProductService.updateProduct(productDTO, productId);
     return "product updated successfully"
   }
 
-
-  @Get(':mansSuitId/products')
-  async getMansSuitProducts(@Param('mansSuitId', ParseIntPipe) mansSuitId: number){
-      return this.manSuitProductService.getMansSuitProducts(mansSuitId);
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Delete('products/:productId')
+  async deleteProduct(
+    @Param('productId', ParseIntPipe) productId: number  
+  ) {
+    await this.manSuitProductService.deleteProduct(productId);
+    return "product deleted successfully"
   }
 }
