@@ -7,6 +7,12 @@ import { WomensAtelier } from "src/womens_atelier/entities/womens-atelier.entity
 import { Column, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Entity } from "typeorm/decorator/entity/Entity";
 
+export enum OrderStatus {
+  PENDING="pending",
+  ACCEPTED="accepted",
+  REJECTED="rejected"
+} 
+
 @Entity()
 export class Order {
       
@@ -17,10 +23,29 @@ export class Order {
   date: Date;
 
   @Column()
-  price: number
+  price: number;
 
   @Column()
-  service_name: string
+  service_name: string;
+
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.PENDING,
+  })
+  status: OrderStatus
+
+  @Column()
+  cardNumber: string;  
+  
+  @Column()
+  cardDate: string;  
+  
+  @Column()
+  cardCVV: string;  
+  
+  @Column()
+  cardName: string;
 
   @ManyToOne(() => WeedingHall, (weeding_hall) => weeding_hall.orders)
   weeding_hall: WeedingHall;

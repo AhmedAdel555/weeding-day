@@ -19,6 +19,21 @@ export class OrdersController {
     return this.ordersService.createOrder(createOrderDto, req.user.userId);
   }
 
+
+  @Roles([UserRole.VENDOR]) // Adjust UserRole according to your application's setup
+  @UseGuards(AuthGuard, RoleGuard)
+  @Post(':orderId/accept')
+  async acceptOrder(@Param('orderId') orderId: number) {
+    return await this.ordersService.acceptOrder(orderId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Post(':orderId/reject')
+  async rejectOrder(@Param('orderId') orderId: number) {
+    return await this.ordersService.rejectOrder(orderId);
+  }
+
   @Roles([UserRole.USER])
   @UseGuards(AuthGuard, RoleGuard)
   @Get('me')
@@ -59,5 +74,41 @@ export class OrdersController {
   @Get('womens-atelier/:womensAtelierId')
   async getOrdersByWomensAtelierId(@Param('womensAtelierId') womensAtelierId: number): Promise<Order[]> {
     return await this.ordersService.getOrdersByWomensAtelierId(womensAtelierId);
+  }
+
+
+  @Roles([UserRole.VENDOR]) // Adjust UserRole according to your application's setup
+  @UseGuards(AuthGuard, RoleGuard)
+  @Get('payments/barber/:barberId')
+  async getPaymentsByBarberId(@Param('barberId') barberId: number) {
+    return await this.ordersService.getPaymentsByBarberId(barberId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Get('payments/beauty-salon/:beautySalonId')
+  async getPaymentsByBeautySalonId(@Param('beautySalonId') beautySalonId: number) {
+    return await this.ordersService.getPaymentsByBeautySalonId(beautySalonId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Get('payments/weeding-hall/:weedingHallId')
+  async getPaymentsByWeedingHallId(@Param('weedingHallId') weedingHallId: number) {
+    return await this.ordersService.getPaymentsByWeedingHallId(weedingHallId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Get('payments/mans-suit/:mansSuitId')
+  async getPaymentsByMansSuitId(@Param('mansSuitId') mansSuitId: number) {
+    return await this.ordersService.getPaymentsByMansSuitId(mansSuitId);
+  }
+
+  @Roles([UserRole.VENDOR])
+  @UseGuards(AuthGuard, RoleGuard)
+  @Get('payments/womens-atelier/:womensAtelierId')
+  async getPaymentsByWomensAtelierId(@Param('womensAtelierId') womensAtelierId: number) {
+    return await this.ordersService.getPaymentsByWomensAtelierId(womensAtelierId);
   }
 }

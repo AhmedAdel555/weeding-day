@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from './entities/order.entity';
+import { Order, OrderStatus } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDTO, OrderDTO } from './dto/create-order.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -34,18 +34,43 @@ export class OrdersService {
 
     const currentUser = await this.userRepository.findOneBy({id: userId});
 
-    // semulate the payment process
-
     createOrder.orders.forEach(async (order) => {
       const newOrder = new Order()
       newOrder.price = order.price;
       newOrder.date = order.date;
       newOrder.service_name = order.serviceName;
       newOrder.user = currentUser;
+      newOrder.cardNumber= order.cardNumber;
+      newOrder.cardName = order.cardName;
+      newOrder.cardDate = order.cardDate;
+      newOrder.cardCVV = order.cardCVV;
       await this.saveBusinessOrder(newOrder, order);
       await this.orderRepository.save(newOrder);
     })
 
+  }
+
+  async acceptOrder(orderId: number): Promise<Order> {
+    const order = await this.orderRepository.findOneBy({id: orderId});
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+
+    order.status = OrderStatus.ACCEPTED;
+    await this.orderRepository.save(order);
+
+    return order;
+  }
+
+  async rejectOrder(orderId: number): Promise<Order> {
+    const order = await this.orderRepository.findOneBy({id: orderId});
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+
+    order.status = OrderStatus.REJECTED;
+    await this.orderRepository.save(order);
+    return order;
   }
 
   async saveBusinessOrder(order: Order, orderDTO: OrderDTO){
@@ -75,35 +100,70 @@ export class OrdersService {
   
   async getOrdersByBarberId(barberId: number): Promise<Order[]> {
     return this.orderRepository.find({
-      where: { barber: { id: barberId } },
+      where: { barber: { id: barberId }, status: OrderStatus.PENDING },
       relations: ['user'],
     });
   }
 
   async getOrdersByBeautySalonId(beautySalonId: number): Promise<Order[]> {
     return this.orderRepository.find({
-      where: { beauty_salon: { id: beautySalonId } },
+      where: { beauty_salon: { id: beautySalonId }, status: OrderStatus.PENDING },
       relations: ['user'],
     });
   }
 
   async getOrdersByWeedingHallId(weedingHallId: number): Promise<Order[]> {
     return this.orderRepository.find({
-      where: { weeding_hall: { id: weedingHallId } },
+      where: { weeding_hall: { id: weedingHallId }, status: OrderStatus.PENDING },
       relations: ['user'],
     });
   }
 
   async getOrdersByMansSuitId(manSuitId: number): Promise<Order[]> {
     return this.orderRepository.find({
-      where: { man_suit: { id: manSuitId } },
+      where: { man_suit: { id: manSuitId }, status: OrderStatus.PENDING },
       relations: ['user'],
     });
   }
 
   async getOrdersByWomensAtelierId(womensAtelierId: number): Promise<Order[]> {
     return this.orderRepository.find({
-      where: { women_atelier: { id: womensAtelierId } },
+      where: { women_atelier: { id: womensAtelierId }, status: OrderStatus.PENDING },
+      relations: ['user'],
+    });
+  }
+
+  async getPaymentsByBarberId(barberId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { barber: { id: barberId }, status: OrderStatus.ACCEPTED },
+      relations: ['user'],
+    });
+  }
+
+  async getPaymentsByBeautySalonId(beautySalonId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { beauty_salon: { id: beautySalonId }, status: OrderStatus.ACCEPTED },
+      relations: ['user'],
+    });
+  }
+
+  async getPaymentsByWeedingHallId(weedingHallId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { weeding_hall: { id: weedingHallId }, status: OrderStatus.ACCEPTED },
+      relations: ['user'],
+    });
+  }
+
+  async getPaymentsByMansSuitId(manSuitId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { man_suit: { id: manSuitId }, status: OrderStatus.ACCEPTED },
+      relations: ['user'],
+    });
+  }
+
+  async getPaymentsByWomensAtelierId(womensAtelierId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { women_atelier: { id: womensAtelierId }, status: OrderStatus.ACCEPTED },
       relations: ['user'],
     });
   }

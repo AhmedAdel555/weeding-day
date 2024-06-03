@@ -37,4 +37,20 @@ export class OrderDTO {
   @IsNumber()
   @IsOptional()
   womenAtelierId?: number;
+
+  @IsString()
+  @IsNotEmpty()
+  cardNumber: string;  
+  
+  @Type(() => Date)
+  @IsDate()
+  cardDate: string;  
+  
+  @IsString()
+  @IsNotEmpty()  
+  cardCVV: string;  
+  
+  @IsString()
+  @IsNotEmpty()
+  cardName: string;
 }
